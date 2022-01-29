@@ -1,0 +1,1440 @@
+-- SENTENCIAS DE MANIPULACION  DE DATOS -----------------------------------------------------------------------------------------------
+
+insert into articulos (descripcion, stock_minimo,pre_unitario,observaciones) values ('Lapices Color Largos *12u. Bic', 0, 101.50,null);
+
+insert into articulos(descripcion,pre_unitario, observaciones) values ('Conjunto Geometrico Maped',20.50,'Regla, Escuadra y Tansportador')
+
+insert into articulos(descripcion,stock_minimo,pre_unitario,observaciones) values ('Repuesto Gloria Rallado Max',120,326.30,'200 Hojas')
+
+insert into articulos(descripcion,pre_unitario,observaciones) values('Repuesto Rivadavia', 465.90,'260 hojas, margen reforzado')
+
+select* from articulos
+
+insert into vendedores(ape_vendedor,nom_vendedor,calle,altura,nro_tel,cod_barrio) values ('Monti','Juan','Altolaguirre',1245,4522122,5)
+
+insert vendedores(ape_vendedor,nom_vendedor,calle,altura,nro_tel,[e-mail],fec_nac,cod_barrio) values('Sena','Rosa','Av Velez Sarfield', 25, null,'rsena@hotmail.com','15/05/1968',1)
+
+set dateformat dmy
+
+insert into clientes values('Katerinne','Williams','Laprida',1612,1,153933626,'katerinnewilliams@hotmail.com')
+insert into clientes values ('Aurelia','lastras','Jose del Prado',4217,2,4289876,'lauralastra@gmail.com')
+insert into clientes values ('Vanesa','Williams','La Rioja',1200,3,153765475,'vanesa_w14@hotmail.com')
+
+update articulos
+set stock_minimo = 5,
+    observaciones = 'lapices de colores'
+	where cod_articulo = 28
+
+
+update clientes
+set nom_cliente = 'Laura',
+
+
+    ape_cliente = 'Lastra'
+	where cod_cliente = 21
+
+update clientes
+set nom_cliente = 'Claudia Vanesa'
+where ape_cliente = 'Williams' and
+      nom_cliente ='Vanesa'
+
+update articulos
+set descripcion = 'Conjunto Geometrico De Plastico'
+where descripcion like 'Conjunto%'
+
+select* from articulos
+
+update articulos
+set stock_minimo = 100,
+observaciones = 'Caja con motivos de Disney',
+pre_unitario = 17.20
+where cod_articulo = 33
+
+select * from articulos
+
+update articulos
+set descripcion = 'Respuesto Rivadavia Cuadriculado',
+observaciones = '48 hojas'
+where descripcion='Repuesto Rivadavia'
+
+delete clientes
+where nom_cliente = 'Laura' and 
+ape_cliente = 'Lastra'
+
+delete clientes
+where cod_cliente = 22
+
+
+delete clientes
+where 
+ nom_cliente = 'Katerinne'
+
+select* from clientes
+
+
+--CONSULTAS SIMPLES----------------------------------------------------------------------------------------------------------------------
+--1. Se quiere listar todos los datos de los clientes con nro. de teléfono conocidos. Muestre el nombre y apellido en una misma columna. Ordene por nombre completo. Rotule en forma conveniente.
+
+select cod_cliente Codigo, nom_cliente + space(2) +ape_cliente 'Nombre Completo', calle , altura , cod_barrio Barrio, nro_tel Telefono, [e-mail] Email
+from clientes
+where nro_tel is not null 
+order by 'nombre completo'
+
+
+--2. Se quiere saber el subtotal de todos los artículos vendidos, para ello liste el código y multiplique la cantidad por el precio unitario (de la tabla: detalle_facturas). Ordene por código en forma ascendente y subtotal en forma descendente. No muestre datos duplicados.
+
+select distinct cod_articulo Articulo,(pre_unitario * cantidad) Subtotal
+from detalle_facturas
+order by cod_articulo asc , subtotal desc  
+
+
+--3. Muestre el código, nombre, apellido (todo el apellido en mayúsculas) y dirección (calle y altura en una sola columna; para la altura utilice una función de conversión) de todos los clientes cuyo nombre comience con “C” y cuyo apellido termine con “Z”. Rotule como CÓDIGO DE CLIENTE, NOMBRE, DIRECCIÓN.
+
+select cod_cliente 'Codigo de Cliente', nom_cliente + space(2) + UPPER(ape_cliente) Nombre, calle + space(2)+ str(altura) Direccion
+from clientes
+where nom_cliente like 'c%' and ape_cliente like '%z'
+
+--4. Ídem al anterior pero el apellido comience con letras que van de la “D” a la “L” y cuyo nombre no comience con letras que van de la “A” a la “G”.
+select cod_cliente 'Codigo de Cliente', nom_cliente + space(2) + UPPER(ape_cliente) Nombre, calle + space(2)+ str(altura) Direccion
+from clientes
+where ape_cliente like '[d-l]%' and nom_cliente not like '[a-g]%'
+--5. Liste los artículos cuyo precio sea menor a 40 y sin observaciones. Ordene por descripción y precio ambos descendente.
+select *
+from articulos
+where pre_unitario <40 and observaciones is null
+order by descripcion desc, pre_unitario desc
+--6. Muestre los datos de los vendedores cuyo nombre no contenga “Z” y cuya fecha de nacimiento sea posterior a 1/1/1970.
+select *
+from vendedores
+where nom_vendedor not like '%z%' and fec_nac> '01/01/1970'
+
+--7. Mostrar las facturas realizadas entre el 1/1/2007 y el 1/5/2009 y cuyos códigos de vendedor sean 1, 3 y 4 o bien entre el 1/1/2010 y el 1/5/2011 y cuyos códigos de vendedor sean 2 y 4.
+
+select *
+from facturas
+where fecha between '01/01/2007' and '01/05/2009' and cod_vendedor in (1,3,4) or fecha between '1/1/2010' and '1/5/2011' and cod_vendedor in (2,4)
+--8. Muestre las ventas (tabla detalle_facturas) de los artículos cuyo precio unitario sea mayor o igual a 10 o cuyos códigos de artículos no sea uno de los siguientes: 2,5, 6, 8, 10. En ambos casos que los números de facturas oscilen entre 50 y 100.
+select *
+from detalle_facturas 
+where (pre_unitario >= 10 or cod_articulo not in(2,5,6,8,10)) and nro_factura between 50 and 100
+--9. Listar todos los datos de los artículos cuyo stock mínimo sea superior a 10 o cuyo precio sea inferior a 20. En ambos casos su descripción no debe comenzar con las letras “p” ni la letra “r”.
+select *
+from articulos
+where (stock_minimo> 10 or pre_unitario <20) and  descripcion not like '[p,r]%'
+--10. Listar los datos de los vendedores nacidos en febrero, abril, mayo o septiembre.
+select *
+from vendedores
+where month(fec_nac) in ( 2,4,5,9)
+
+
+-- COMPOSICION DE TABLAS 
+
+--2. Liste número de factura, fecha de venta y vendedor (apellido y nombre), para los casos en que el código del cliente van del 2 al 6. Ordene por vendedor y fecha, ambas en forma descendente.
+select nro_factura Factura, fecha 'Fecha de venta', ape_vendedor + space(2) + nom_vendedor Vendedor 
+from facturas f, vendedores v 
+where f.cod_vendedor = v.cod_vendedor
+and cod_cliente between 2 and 6 
+order by vendedor desc, [Fecha de venta] desc
+
+--3. Emitir un reporte con los datos de la factura del cliente y del vendedor de aquellas facturas confeccionadas entre el primero de febrero del 2008 y el primero de marzo del 2010 y que el apellido del cliente no contenga “C”.
+select *
+from facturas f, clientes c , vendedores v
+where f.cod_cliente = c.cod_cliente and f.cod_vendedor = v.cod_vendedor
+and
+fecha between '01/02/2008' and '01/03/2010' and ape_cliente like '%c%'
+
+
+--4. Listar los datos de la factura, los del artículo y el importe (precio por cantidad); para las facturas emitidas en el 2009, 2010 y 2012 y la descripción no comience con “R”. Ordene por número de factura e importe, este en forma descendente. Rotule.
+select f.nro_factura factura,a.cod_articulo articulo, (d.pre_unitario*cantidad) importe
+from facturas f, detalle_facturas d, articulos a
+where f.nro_factura = d.nro_factura and d.cod_articulo = a.cod_articulo
+and year(fecha) in (2009,2010,2012) and descripcion not like 'r%'
+order by factura, importe desc 
+
+
+--5. Se quiere saber qué artículos se vendieron, siempre que el precio al que fue vendido no esté entre $10 y $50. Rotule como: Código de Artículo, Descripción, Cantidad e Importe (El importe es el precio por la cantidad).
+
+select a.cod_articulo 'Codigo de Aticulo', descripcion Descripcion, cantidad Cantidad, (d.pre_unitario *cantidad) Importe, d.pre_unitario 'Precio unitario'
+from articulos a, detalle_facturas d
+where a.cod_articulo = d.cod_articulo 
+and
+d.pre_unitario not between 10 and 50 
+
+
+
+
+--6. Liste todos los datos de la factura (vendedor, cliente, artículo, incluidos los datos de la venta); emitidas a clientes con teléfonos o direcciones de e-mail conocidas de aquellas facturas cuyo importe haya sido superior a $250. Agregue rótulos presentación y ordene el listado para darle mejor presentación.
+
+
+select cod_vendedor Vendedor,cl.nom_cliente + space(2)+  ape_cliente Cliente,ar.descripcion Descripcion,df.cantidad Cantidad, df.pre_unitario*cantidad Precio
+from facturas fa,clientes cl,detalle_facturas df,articulos ar
+where fa.cod_cliente = cl.cod_cliente and df.cod_articulo = ar.cod_articulo and fa.nro_factura = df.nro_factura and (cl.nro_tel is not null or 
+cl.[e-mail] is not null)
+and df.pre_unitario*cantidad >250 
+order by fa.nro_factura, ar.cod_articulo
+
+
+
+--7. Se quiere saber a qué cliente, de qué barrio, vendedor y en qué fecha se les vendió con los siguientes nros. de factura: 12, 18, 1, 3, 35, 26 y 29.
+select nom_cliente + space(2) + ape_cliente Cliente , barrio Barrio , nom_vendedor + space(2) + ape_vendedor Vendedor, fecha Fecha
+from clientes c, barrios b, vendedores v, facturas f
+where c.cod_cliente = f.cod_cliente and v.cod_vendedor = f.cod_vendedor and c.cod_barrio = b.cod_barrio
+and nro_factura in (12,18,1,3,35,26,29)
+
+--8. Emitir un reporte para informar qué artículos se vendieron, en las facturas cuyos números no esté entre 17 y 136. Liste la descripción, cantidad e importe. Ordene por descripción y cantidad. No muestre las filas con valores duplicados
+
+select distinct descripcion Articulo, d.cantidad, d.pre_unitario * cantidad Importe 
+from articulos a, detalle_facturas d 
+where a.cod_articulo = d.cod_articulo
+and nro_factura not between 17 and 136
+order by descripcion, cantidad 
+
+
+
+--9. Listar los datos de las facturas (cliente, artículo, incluidos los datos de la venta incluido el importe) emitidas a los clientes cuyos apellidos comiencen con letras que van de la “l” a “s” o los artículos vendidos que tengan descripciones que comiencen con las mismas letras. Ordenar el listado.
+
+select ape_cliente Cliente, descripcion Articulo, fecha, cantidad Cantidad , d.pre_unitario Precio, d.pre_unitario*cantidad Importe, a.pre_unitario 'Precio de Articulo'
+from detalle_facturas d, facturas f, clientes c, articulos a
+where d.nro_factura = f.nro_factura and c.cod_cliente = f.cod_cliente and a.cod_articulo = d.cod_articulo
+and (ape_cliente like '[l-s]%' or a.descripcion like '[l-s]%')
+order by descripcion
+
+
+
+--10. Realizar un reporte de los artículos que se vendieron en lo que va del año. (Muestre los datos que sean significativos para el usuario del sistema usando rótulos para que sea más legible y que los artículos no se muestren repetidos).
+select distinct d.cod_articulo Codigo, descripcion Articulo, year(fecha) 'Año'
+from detalle_facturas d, articulos a, facturas f
+where d.cod_articulo = a.cod_articulo and f.nro_factura = d.nro_factura
+and year(fecha) = year( getdate())
+
+
+--11. Se quiere saber a qué clientes se les vendió el año pasado, qué vendedor le realizó la venta, y qué artículos compró, siempre que el vendedor que les vendió sea menor de 35 años.
+
+select nom_cliente + space(2) + ape_cliente Cliente, year(fecha) 'Año', nom_vendedor + space(2) + ape_vendedor Vendedor, a.descripcion Articulo, year(fec_nac) 'Fecha de Nacimiento'
+from clientes c, facturas f, detalle_facturas d, articulos a, vendedores v 
+where c.cod_cliente = f.cod_cliente and d.cod_articulo = a.cod_articulo and f.nro_factura =d.nro_factura and v.cod_vendedor = f.cod_vendedor
+and year(fecha) = year(getdate())-1 and fec_nac > dateadd(year,-35,'12/11/2020') 
+
+select  cl.nom_cliente +' '+ ape_cliente Cliente, v.nom_vendedor + ' '+ v.ape_vendedor Vendedor, ar.descripcion, year(fec_nac)
+from clientes cl, detalle_facturas df, facturas fa,articulos ar, vendedores v
+where cl.cod_cliente = fa.cod_cliente and v.cod_vendedor = fa.cod_vendedor and df.cod_articulo= ar.cod_articulo and fa.nro_factura = df.nro_factura
+and year(fa.fecha) = year (getdate())-1
+and year (v.fec_nac)> year (fa.fecha)-35
+
+--12. El usuario de este sistema necesita ver el listado de facturas, de aquellos artículos cuyos precios unitarios a los que fueron vendidos estén entre 50 y 100 y de aquellos vendedores cuyo apellido no comience con letras que van de la “l” a la “m”. Ordenado por vendedor, fecha e importe.
+
+select f.nro_factura Factura, descripcion Articulo, d.pre_unitario, nom_vendedor + space(2) + ape_vendedor Vendedor, fecha Fecha, d.pre_unitario* cantidad Importe
+from facturas f, detalle_facturas d, articulos a, vendedores v 
+where f.nro_factura = d.nro_factura and a.cod_articulo = d.cod_articulo and v.cod_vendedor = f.cod_vendedor
+and d.pre_unitario between 50 and 100 and ape_vendedor not like '[l-m]%'
+order by fecha, importe
+
+
+--13. Se desea emitir un listado de clientes que compraron en enero, además saber qué compraron cuánto gastaron (mostrar los datos en forma conveniente)
+select distinct nom_cliente + space(2) + ape_cliente CLiente, MONTH(fecha) Mes, descripcion Articulo , d.pre_unitario* cantidad Importe
+from clientes c,facturas f, detalle_facturas d, articulos a
+where c.cod_cliente = f.cod_cliente and f.nro_factura = d.nro_factura and a.cod_articulo = d.cod_articulo
+and month(fecha) = 1 
+order by CLiente
+
+
+--14. Emitir un reporte de artículos vendidos en el 2010 a qué precios se vendieron y qué precio tienen hoy.
+
+select descripcion Articulo, a.pre_unitario 'Precio Actial' , d.pre_unitario 'Precio del 2010', year(fecha) 'Año'
+from articulos a, detalle_facturas d, facturas f
+where a.cod_articulo =d.cod_articulo and f.nro_factura = d.nro_factura
+and year(fecha) =2010
+
+
+
+
+--15. Listar los vendedores que hace 10 años les vendieron a clientes cuyos nombres o apellidos comienzan con "C".
+
+select nom_cliente + space(2) + ape_cliente CLiente,nom_vendedor + space(2) + ape_vendedor Vendedor, year(fecha) Fecha
+from vendedores v, facturas f, clientes c
+where v.cod_vendedor = f.cod_vendedor and f.cod_cliente = c.cod_cliente
+and year(fecha) = year(getdate())-10
+
+
+--16. El encargado de la librería necesita tener información sobre los artículos que se vendían a menos de $ 10 antes del 2015. Mostrar los datos que se consideren relevantes para el encargado, rotular y ordenar.
+
+select descripcion Articulo, YEAR(fecha) Año, d.pre_unitario Precio
+from articulos a, detalle_facturas d, facturas f
+where a.cod_articulo =d.cod_articulo and d.nro_factura = f.nro_factura
+and d.pre_unitario <10 and year(fecha)< year(getdate())-5
+order by descripcion, d.pre_unitario
+
+select art.descripcion Articulos, fa.fecha Fecha, df.pre_unitario Precio
+from articulos art, facturas fa, detalle_facturas df
+where art.cod_articulo = df.cod_articulo and fa.nro_factura = df.nro_factura
+and df.pre_unitario<10 and
+year (fa.fecha)<2015
+
+
+
+--SUMARIAS----------------------------------------------------------------------------------------------------------------------------------------------
+
+--7. Se quiere saber la cantidad de ventas que hizo el vendedor de código 3.
+select count(distinct nro_factura) 'Cantidad de ventas'
+from vendedores v, facturas f 
+where v.cod_vendedor = f.cod_vendedor
+and v.cod_vendedor=3
+
+--8. ¿Cuál fue la fecha de la primera y última venta que se realizó en este negocio?
+
+select min(fecha) 'Primera Factura', MAX(fecha) 'Ultima Factura'
+from facturas
+
+--9. Mostrar la siguiente información respecto a la factura nro.: 450: cantidad total de unidades vendidas, la cantidad de artículos diferentes vendidos y el importe total.
+
+select sum(cantidad) 'Cantidad de unidades', count( distinct d.cod_articulo)'Cantidad de articulos dif', sum(cantidad *d.pre_unitario)'Importe Total', a.descripcion
+from detalle_facturas d join articulos a on d.cod_articulo =a.cod_articulo
+where nro_factura = 450
+group by a.descripcion
+
+select*
+from detalle_facturas
+where nro_factura =450
+
+
+
+--10. ¿Cuál fue la cantidad total de unidades vendidas, importe total y el importe promedio para vendedores cuyos nombres comienzan con letras que van de la “d” a la “l”?
+select sum(distinct cantidad) Cantidad, sum(cantidad *pre_unitario) 'Iporte Total', avg(pre_unitario *cantidad) Promedio
+from detalle_facturas d, vendedores v, facturas f
+where d.nro_factura = f.nro_factura and f.cod_vendedor = v.cod_vendedor
+and nom_vendedor like '[d-l]%'
+
+--11. Se quiere saber el importe total vendido, el promedio del importe vendido y la cantidad total de artículos vendidos para el cliente Roque Paez.
+
+select sum(pre_unitario *cantidad)'Importe Total', count(cod_articulo)'Cantidad Total de Articulos' 
+from detalle_facturas d, facturas f, clientes c
+where d.nro_factura = f.nro_factura and c.cod_cliente = f.cod_cliente
+and nom_cliente = 'Roque' and ape_cliente = 'Paez'
+
+--12. Mostrar la fecha de la primera venta, la cantidad total vendida y el importe total vendido para los artículos que empiecen con “C”.
+select min(fecha)'Primera venta', sum(cantidad) 'Cantidad', sum(cantidad * d.pre_unitario) 'Importe total'
+from detalle_facturas d, articulos a, facturas f 
+where d.cod_articulo = a.cod_articulo and f.nro_factura = d.nro_factura
+and descripcion like 'c%'
+
+--13. Se quiere saber la cantidad total de artículos vendidos y el importe total vendido para el periodo del 15/06/2011 al 15/06/2017.
+
+select sum(cantidad) Cantidad, sum(pre_unitario *cantidad) Importe
+from detalle_facturas d join facturas f on d.nro_factura = f.nro_factura
+where fecha between '15/06.2011' and '15/06/2017'
+
+
+--14. Se quiere saber la cantidad de veces y la última vez que vino el cliente de apellido Abarca y cuánto gastó en total.
+select count(distinct f.nro_factura) 'Cantidad de veces', max(fecha) 'Ultima vez', sum(pre_unitario *cantidad) 'Gasto' 
+from detalle_facturas d, facturas f, clientes c
+where ape_cliente = 'Abarca'
+
+
+--15. Mostrar el importe total y el promedio del importe para los clientes cuya dirección de mail es conocida.
+select sum(cantidad *pre_unitario) Importe, avg(cantidad *pre_unitario) Promedio
+from detalle_facturas d, facturas f, clientes c
+where [e-mail] is not null
+
+
+--16. Obtener la siguiente información: el importe total vendido y el importe promedio vendido para números de factura que no sean los siguientes: 13, 5, 17, 33, 24.
+select sum(cantidad * pre_unitario) importe, avg(pre_unitario *cantidad) promedio
+from detalle_facturas
+where nro_factura not in (13,5,17,33,24)
+
+-- FUNCIONES DE AGREGADO: COUNT, MAX , MIN , SUM Y AVG ----------------------------------------------------------------------------------------
+--GROUP BY ------------------------------------------------------------------------------------------------
+
+--2. Por cada factura emitida mostrar la cantidad total de artículos vendidos (suma de las cantidades vendidas), la cantidad ítems que tiene cada factura en el detalle (cantidad de registros de detalles) y el Importe total de la facturación de este año.
+SELECT sum(cod_articulo)'Cantidad e articulos vendidos', count(*) 'Cantidad de items', sum(cantidad * pre_unitario), f.nro_factura Factura
+FROM detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+and year(fecha) = year(getdate())
+group by f.nro_factura
+
+
+
+
+
+--3. Se quiere saber en este negocio, cuánto se factura:
+--a. Diariamente
+--b. Mensualmente
+--c. Anualmente
+select day(fecha) Dia, sum(cantidad *pre_unitario)'FActuracion total'
+from detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+group by day(fecha)
+order by 1
+
+select month(fecha) Dia, sum(cantidad *pre_unitario)'FActuracion total'
+from detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+group by month(fecha)
+order by 1
+
+select year(fecha) Dia, sum(cantidad *pre_unitario)'FActuracion total'
+from detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+group by year(fecha)
+order by 1
+
+
+
+
+--4. Emitir un listado de la cantidad de facturas confeccionadas diariamente, correspondiente a los meses que no sean enero, julio ni diciembre. Ordene por la cantidad de facturas en forma descendente y fecha.
+
+select count(nro_factura) 'Cantidad de facturas', day(fecha) Dia
+from facturas
+where month(fecha) not in (1,7,12)
+group by fecha,nro_factura
+order by nro_factura desc,fecha
+
+
+
+--5. Se quiere saber la cantidad y el importe promedio vendido por fecha y cliente, para códigos de vendedor superiores a 2. Ordene por fecha y cliente.
+
+select sum(cantidad) Cantidad, avg(pre_unitario *cantidad) importe, fecha Fecha, cod_cliente Cliente
+from detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+and cod_vendedor > 2
+group by fecha, cod_cliente
+order by fecha, cliente
+
+
+--6. Se quiere saber el importe promedio vendido y la cantidad total vendida por fecha y artículo, para códigos de cliente inferior a 3. Ordene por fecha y artículo.
+select avg(pre_unitario *cantidad) Promedio, sum(cantidad) Cantidad , fecha Fecha, cod_articulo Articulo
+from detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+and cod_cliente<3
+group by fecha,cod_articulo
+order by fecha, Articulo
+
+
+--7. Listar la cantidad total vendida, el importe total vendido y el importe promedio total vendido por número de factura, siempre que la fecha no oscile entre el 13/2/2007 y el 13/7/2010.
+select sum(cantidad) cantidad,sum(pre_unitario*cantidad) Importe, avg(pre_unitario*cantidad) Promedio, f.nro_factura Factura
+from facturas f, detalle_facturas d 
+where f.nro_factura = d.nro_factura
+and  fecha not between '13/02/2007' and '13/07/2010'
+group by f.nro_factura
+
+--8. Emitir un reporte que muestre la fecha de la primer y última venta y el importe comprado por cliente. Rotule como CLIENTE, PRIMER VENTA, ÚLTIMA VENTA, IMPORTE.
+select cod_cliente Cliente, min(fecha) 'Primera Venta', max(fecha) 'Ultima venta', sum(pre_unitario *cantidad) importe
+from facturas f , detalle_facturas d
+where f.nro_factura = d.nro_factura
+group by cod_cliente
+order by 1
+
+--9. Se quiere saber el importe total vendido, la cantidad total vendida y el precio unitario promedio por cliente y artículo, siempre que el nombre del cliente comience con letras que van de la “a” a la “m”. Ordene por cliente, precio unitario promedio en forma descendente y artículo. Rotule como IMPORTE TOTAL, CANTIDAD TOTAL, PRECIO PROMEDIO.
+select sum(pre_unitario*cantidad) 'Importe Total', sum(cantidad) 'Cantidad Total',avg(pre_unitario) 'Precio Promedio', nom_cliente + space(2) + ape_cliente Cliente, cod_articulo Articulo 
+from detalle_facturas d, facturas f, clientes c
+where d.nro_factura = f.nro_factura and c.cod_cliente = f.cod_cliente
+and nom_cliente like '[a-m]%'
+group by nom_cliente + space(2) + ape_cliente, cod_articulo
+order by Cliente, [Precio Promedio] desc, Articulo
+
+
+--10. Se quiere saber la cantidad de facturas y la fecha la primer y última factura por vendedor y cliente, para números de factura que oscilan entre 5 y 30. Ordene por vendedor, cantidad de ventas en forma descendente y cliente.
+
+select count(*) 'Cantidad de Ventas',min(fecha) 'Primer Factura', max(fecha) 'ultima factura', cod_vendedor Vendedor,cod_cliente Cliente
+from facturas
+where nro_factura between 5 and 30
+group by cod_vendedor, cod_cliente
+order by Vendedor, [Cantidad de Ventas] desc , Cliente
+
+--HAVING-------------------------------------------------------------------------------------------------------------------------------------------------
+--1. Se necesita saber el importe total de cada factura, pero solo aquellas donde ese importe total sea superior a 2500.
+SELECT nro_factura Factura, sum(cantidad*pre_unitario) importe
+FROM detalle_facturas d
+group by nro_factura
+having sum(cantidad*pre_unitario)> 2500
+order by 1
+--2. Se desea un listado de vendedores y sus importes de ventas del año 2017 pero solo aquellos que vendieron menos de $ 17.000.- en dicho año.
+select v.cod_vendedor Codigo,ape_vendedor Vendedor, sum(cantidad *pre_unitario) Importe 
+from facturas f , detalle_facturas d, vendedores v
+where f.nro_factura = d.nro_factura and v.cod_vendedor = f.cod_vendedor
+and year(fecha) = 2017
+group by v.cod_vendedor, ape_vendedor
+having sum(cantidad*pre_unitario)< 17000
+
+--3. Se quiere saber la fecha de la primera venta, la cantidad total vendida y el importe total vendido por vendedor para los casos en que el promedio de la cantidad vendida sea inferior o igual a 56.
+select min(fecha) 'Primera Venta', sum(cantidad) Cantidad, sum(cantidad * pre_unitario) Importe
+from detalle_facturas d, facturas f
+where d.nro_factura = f.nro_factura
+group by cod_vendedor
+having avg(cantidad)<56
+
+
+--4. Se necesita un listado que informe sobre el monto máximo, mínimo y total que gastó en esta librería cada cliente el año pasado, pero solo donde el importe total gastado por esos clientes esté entre 300 y 800.
+select max(pre_unitario *cantidad) 'Monto Maximp', min(pre_unitario * cantidad)'Monto Minimo', sum(pre_unitario* cantidad) 'Monto Total',cod_cliente Cliente
+from detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+group by cod_cliente
+having sum(cantidad*pre_unitario) between 3000 and 8000
+
+
+--5. Muestre la cantidad facturas diarias por vendedor; para los casos en que esa cantidad sea 2 o más.
+
+select count(nro_factura)'Cantidad de facturas', day(fecha)'Dia', nom_vendedor + space(2) + ape_vendedor 'Vendedor'
+from facturas f, vendedores v
+where f.cod_vendedor = v.cod_vendedor
+group by nom_vendedor + space(2) + ape_vendedor,fecha 
+having count(nro_factura)>=2
+
+
+--6. Desde la administración se solicita un reporte que muestre el precio promedio, el importe total y el promedio del importe vendido por artículo que no comiencen con “c”, que su cantidad total vendida sea 100 o más o que ese importe total vendido sea superior a 700.
+select avg(d.pre_unitario) ' Precio Promedio', sum(d.pre_unitario*cantidad) Importe, avg(d.pre_unitario *cantidad)'Promedio de importe'
+from detalle_facturas d, articulos a
+where d.cod_articulo = a.cod_articulo 
+and descripcion not like 'c%'
+group by  descripcion
+having sum(cantidad)>=100 or sum(cantidad*d.pre_unitario)>700
+
+
+--7. Muestre en un listado la cantidad total de artículos vendidos, el importe total y la fecha de la primer y última venta por cada cliente, para lo números de factura que no sean los siguientes: 2, 12, 20, 17, 30 y que el promedio de la cantidad vendida oscile entre 2 y 6.
+
+select  sum(cod_articulo) 'Cantidad total de articulos vendidos', sum(cantidad*pre_unitario) 'Importe Total', min(fecha) 'Primera Venta', max(fecha) 'Ultima Venta', cod_cliente Cliente
+from detalle_facturas d, facturas f 
+where d.nro_factura = f.nro_factura
+and d.nro_factura not in (2,12,20,17,30)
+group by cod_cliente
+having avg(cantidad) between 20 and 60 
+
+
+--8. Emitir un listado que muestre la cantidad total de artículos vendidos, el importe total vendido y el promedio del importe vendido por vendedor y por cliente; para los casos en que el importe total vendido esté entre 200 y 600 y para códigos de cliente que oscilen entre 1 y 5.
+select cod_vendedor Vendedor, cod_cliente Cliente, sum(cod_articulo) Cantidad, sum(cantidad*pre_unitario) 'Importe Total', avg(pre_unitario*cantidad) Promedio
+from detalle_facturas d, facturas f
+where d.nro_factura = f.nro_factura
+and cod_cliente between 1 and 5 
+group by cod_vendedor, cod_cliente
+having sum(cantidad*pre_unitario) between 2000 and 6000
+ 
+
+--9. ¿Cuáles son los vendedores cuyo promedio de facturación el mes pasado supera los $ 800?
+select cod_vendedor Vendedor, avg(pre_unitario*cantidad) Promedio
+from facturas f, detalle_facturas d 
+where d.nro_factura = f.nro_factura
+and year(fecha)=year(dateadd(month,-1,getdate()))
+group by cod_vendedor
+having avg(pre_unitario *cantidad)>100
+
+select  sum(cantidad *pre_unitario)/count (distinct f.nro_factura) 'promedio', nom_vendedor+' '+ape_vendedor 'Nombre vendedor'
+from facturas f, vendedores v, detalle_facturas d
+where f.cod_vendedor= v.cod_vendedor and f.nro_factura= d.nro_factura
+and datediff(month,fecha,getdate())=1
+group by nom_vendedor + ' '+ ape_vendedor
+having sum(cantidad *pre_unitario)/count(distinct f.nro_factura) <= 800
+
+--10. ¿Cuánto le vendió cada vendedor a cada cliente el año pasado siempre que la cantidad de facturas emitidas (por cada vendedor a cada cliente) sea menor a 5?
+
+select sum(cantidad*pre_unitario) Importe, cod_cliente Cliente, cod_vendedor Vendedor
+from facturas f , detalle_facturas d
+where f.nro_factura  = d.nro_factura
+and year(fecha) = year(getdate())-1
+group by cod_vendedor, cod_cliente
+having count(f.nro_factura)<5
+
+
+
+
+--UNION--------------------------------------------------------------------------------------------------------------------------------------------------------------
+--1. Se quiere saber qué vendedores y clientes hay en la empresa; para los casos en que su teléfono y dirección de e-mail sean conocidos. Se deberá visualizar el código, nombre y si se trata de un cliente o de un vendedor. Ordene por la columna tercera y segunda.
+
+select cod_cliente Codigo, nom_cliente +space(2)+ ape_cliente Nombre, 'Cliente' tipo 
+from clientes
+where nro_tel is not null and [e-mail] is not null
+union
+select cod_vendedor Codigo, nom_vendedor +space(2)+ ape_vendedor Nombre,'Vendedor'
+from vendedores
+order by 3,2
+
+
+--2. Emitir un listado donde se muestren qué artículos, clientes y vendedores hay en la empresa. Determine los campos a mostrar y su ordenamiento.
+
+select cod_articulo Codigo, descripcion Nombre, 'Articulo' tipo
+from articulos
+union 
+select cod_cliente Codigo, nom_cliente +space(2)+ ape_cliente Nombre,'Cliente'
+from clientes
+union
+select cod_vendedor Codigo, nom_vendedor +space(2)+ ape_vendedor Nombre, 'Vendedor'
+from vendedores
+order by 3
+--3. Se quiere saber las direcciones (incluido el barrio) tanto de clientes como de vendedores. Para el caso de los vendedores, códigos entre 3 y 12. En ambos casos las direcciones deberán ser conocidas. Rotule como NOMBRE, DIRECCION, BARRIO, INTEGRANTE (en donde indicará si es cliente o vendedor). Ordenado por la primera y la última columna.
+
+select nom_cliente +space(2)+ ape_cliente Nombre, calle + space(2)+ str(altura) Direccion, barrio Barrio,'Cliente' Integrante 
+from clientes c , barrios  b 
+where c.cod_barrio = b.cod_barrio 
+and calle is not null and altura is not null
+union
+select nom_vendedor +space(2)+ ape_vendedor Nombre,calle + space(2)+ str(altura) Direccion, barrio Barrio, 'Vendedor'
+from vendedores v, barrios b 
+where v.cod_barrio = b.cod_barrio and
+cod_vendedor between 3 and 12 and calle is not null and altura is not null
+order by 1,4
+
+
+--4. Ídem al ejercicio anterior, sólo que además del código, identifique de donde obtiene la información (de qué tabla se obtienen los datos).
+select nom_cliente + ' ' +ape_cliente Cliente, calle + space(2) + cast(altura as varchar) 'DIRECCION', barrio BARRIO, ' clientes' TABLA
+from clientes,barrios
+where calle is not null and altura is not null
+
+union all
+
+select nom_vendedor + ' ' + ape_vendedor Vendedor, calle + space(2) + cast(altura as varchar) 'DIRECCION', barrio BARRIO, 'vendedores'
+from vendedores, barrios
+where calle is not null and altura is not null and cod_vendedor between 3 and 12
+order by 1,4
+--5. Listar todos los artículos que están a la venta cuyo precio unitario oscile entre 10 y 50; también se quieren listar los artículos que fueron comprados por los clientes cuyos apellidos comiencen con “M” o con “P”.
+
+
+select cod_articulo Codigo, pre_unitario Precio, descripcion Nombre, 'Articulos a la venta' Tipo
+from articulos
+where pre_unitario between 10 and 50 
+union
+select cod_articulo Codigo, pre_unitario Precio, nom_cliente +space(2)+ ape_cliente Nombre, 'Articulos vendidos'
+from detalle_facturas, clientes
+where ape_cliente like '[m,p]%'
+
+
+--6. El encargado del negocio quiere saber cuánto fue la facturación del año pasado. Por otro lado cuánto es la facturación del mes pasado, la de este mes y la de hoy (Cada pedido en una consulta distinta, y puede unirla
+--en una sola tabla de resultado)
+
+select (pre_unitario*cantidad)'Totl FActurado', 'Año Pasado' Facturacion
+from detalle_facturas d, facturas f 
+where f.nro_factura = d.nro_factura 
+and datediff(year,fecha,getdate())=1
+union
+select sum(pre_unitario*cantidad)'Totl FActurado',  'Mes Pasado'
+from detalle_facturas d, facturas f 
+where f.nro_factura = d.nro_factura 
+and year(fecha) = year(dateadd(month,-1,getdate()))
+union
+select sum(pre_unitario*cantidad)'Totl FActurado', 'Mes actual'
+from detalle_facturas d, facturas f 
+where f.nro_factura = d.nro_factura 
+and year(fecha) =year(getdate()) and  month(fecha)=month(getdate())
+union
+select sum(pre_unitario*cantidad)'Totl FActurado',  'Hoy'
+from detalle_facturas d, facturas f 
+where f.nro_factura = d.nro_factura 
+and year(fecha) = year(getdate()) and month(fecha) = month(getdate()) and DAY(fecha) = day(getdate())
+order by 1
+
+--JOIN---------------------------------------------------------------------------------------------------------------
+--1. Genere un reporte con los datos de la facturación (datos de las facturas incluidos los del vendedor y cliente) de los años 2006, 2007, 2009 y 2012.
+SELECT *
+FROM facturas f join clientes c on f.cod_cliente = c.cod_cliente join vendedores v on v.cod_vendedor = f.cod_vendedor
+where year(fecha) in (2006,2007,2009,2012)
+
+
+--2. Liste los datos de la facturación, de los artículos y de la venta de las facturas correspondientes al mes pasado.
+select*
+from facturas f join detalle_facturas d on f.nro_factura = d.nro_factura join articulos a on a.cod_articulo = d.cod_articulo
+where year(fecha) = year(dateadd(month,-1,getdate()))
+--3. Emita un listado con los datos del vendedor y las ventas que ha realizado en lo que va del año. Muestre los vendedores aun así no tengan ventas registradas en el año solicitado.
+select *
+from facturas f left join vendedores v  on v.cod_vendedor = f.cod_vendedor
+where year(fecha) = year(getdate())
+
+--4. Liste descripción, cantidad e importe; aun para aquellos artículos que no registran ventas.
+select descripcion , cantidad , cantidad*d.pre_unitario Importe
+from articulos a left join detalle_facturas d on a.cod_articulo = d.cod_articulo 
+
+
+--5. Genere un reporte con los datos de la facturación (datos de las facturas incluidos los del vendedor y cliente) y de la venta (incluido el importe); para las ventas de febrero y marzo de los años 2006 y 2007 y siempre que el artículo empiece con letras que van de la “a” a la “m”. Ordene por fecha, cliente y artículo.
+
+select f.nro_factura Factura, ape_cliente Cliente, ape_vendedor Vendedor ,cantidad*d.pre_unitario Importe, descripcion Articulo
+from facturas f join detalle_facturas d on f.nro_factura= d.nro_factura join clientes c on c.cod_cliente=f.cod_cliente join vendedores v on v.cod_vendedor = f.cod_vendedor join articulos a on a.cod_articulo = d.cod_articulo
+where year(fecha) in(2006,2007) and month(fecha) in(2,3) and descripcion like '[a-m]%'
+order by fecha, Cliente, Articulo
+
+
+--6. Liste código de cliente, nombre, fecha y factura para las ventas del año 2007. Muestre los clientes hayan comprado o no en ese año.
+select c.cod_cliente Codigo, nom_cliente Nombre , fecha, nro_factura Factura
+from clientes c right join facturas f on c.cod_cliente = f.cod_cliente
+where year(fecha) =2007
+
+--7. Se quiere saber los artículos que compro la cliente Elvira López en lo que va del año. Liste artículo, observaciones e importe.
+select descripcion Articulo, observaciones, d.pre_unitario* cantidad Importe
+from detalle_facturas d join articulos a on a.cod_articulo = d.cod_articulo join facturas f on f.nro_factura =d.nro_factura join clientes c on c.cod_cliente = f.cod_cliente
+where nom_cliente = 'Elvira' and ape_cliente = 'Lopez ' and year(fecha) = year(getdate()) and month(fecha) <= month(getdate()) and day(fecha) <= day(getdate()) 
+
+
+
+--8. Se quiere saber los artículos que compraron los clientes cuyos apellidos empiezan con “p”. Liste cliente, articulo, cantidad e importe. Ordene por cliente y artículo, este en forma descendente. Rotule como CLIENTE, ARTICULO, CANTIDAD, IMPORTE.
+
+select ape_cliente Cliente, descripcion Articulo, cantidad , cantidad*d.pre_unitario Importe
+from detalle_facturas d join facturas f on f.nro_factura = d.nro_factura join articulos a on a.cod_articulo = d.cod_articulo join clientes c on c.cod_cliente = f.cod_cliente
+where ape_cliente like 'p%'
+order by Cliente, Articulo desc 
+
+
+
+
+--SUBCONSULTAS EN EL WHERE--------------------------------------------------------------------------------------------------------------------------------
+
+
+--listado de articulos baratos 
+select descripcion , pre_unitario
+from articulos
+where pre_unitario<50
+
+--1. Un listado de artículos cuyo precio es inferior al promedio de precios de todos los artículos. (está resuelto en el material teórico)
+
+select cod_articulo
+from articulos 
+where pre_unitario <(select avg(pre_unitario)
+                     from articulos) 
+
+
+
+--Se quieren listar los clientes que compraron  este año
+select cod_cliente Codigo, ape_cliente + + nom_cliente Cliente
+from clientes
+where cod_cliente in (select cod_cliente
+					from facturas
+					where year(fecha) = year(getdate())
+					)
+
+--Se quieren listar los clientes que no compraron  este año
+select cod_cliente Codigo, ape_cliente + + nom_cliente Cliente
+from clientes c
+where cod_cliente not in (select cod_cliente
+					from facturas f 
+					where year(fecha) = year(getdate())
+					)
+
+
+
+--Se quieren listar los clientes que compraron  este año
+select cod_cliente Codigo, ape_cliente + + nom_cliente Cliente
+from clientes c 
+where exists (select cod_cliente
+					from facturas f 
+					where year(fecha) = year(getdate())
+					and c.cod_cliente = f.cod_cliente
+					)
+
+--Se quieren listar los clientes que no compraron  este año
+
+select cod_cliente Codigo, ape_cliente + + nom_cliente Cliente
+from clientes c 
+where not exists (select cod_cliente
+					from facturas f 
+					where year(fecha) = year(getdate())
+					and c.cod_cliente = f.cod_cliente
+					)
+
+-- listar los clientes que compraron algun producto con precio menor a 10 
+select cod_cliente Codigo, ape_cliente + + nom_cliente Cliente
+from clientes c
+where 10 > any(select pre_unitario
+				from detalle_facturas d join  facturas f on d.nro_factura = f.nro_factura
+				where f.cod_cliente = c.cod_cliente)
+--- listar los clientes que compraron todos los  productos con precio menor a 10 
+select cod_cliente Codigo, ape_cliente + + nom_cliente Cliente
+from clientes c
+where 10 > all(select pre_unitario
+				from detalle_facturas d join  facturas f on d.nro_factura = f.nro_factura
+				where f.cod_cliente = c.cod_cliente)
+
+
+--2. Emitir un listado de los artículos que no fueron vendidos este año. En ese listado solo incluir aquellos cuyo precio unitario del artículo oscile entre 20 y 50.
+select a.cod_articulo Codigo, descripcion Articulo, a.pre_unitario Precio 
+from articulos a 
+where a.cod_articulo not in (select cod_articulo
+							from facturas f join detalle_facturas d on f.nro_factura = d.nro_factura
+							where year(fecha) = year(getdate())
+							)
+and a.pre_unitario between 20 and 50 
+
+select a.cod_articulo Codigo, descripcion Articulo, a.pre_unitario Precio 
+from articulos a 
+where not exists (select cod_articulo
+							from facturas f join detalle_facturas d on f.nro_factura = d.nro_factura
+							where year(fecha) = year(getdate())
+							and a.cod_articulo = d.cod_articulo
+							)
+and a.pre_unitario between 20 and 50 
+
+
+
+--3. Genere un reporte con los clientes que vinieron más de 2 veces el año pasado.
+
+select cod_cliente Codigo, nom_cliente + space(2) +ape_cliente Cliente
+from clientes c
+where 2 <  (select count(cod_cliente)
+			from facturas f
+			where year(fecha) = year(getdate())-1
+			and c.cod_cliente = f.cod_cliente
+			)
+
+
+--4. Se quiere saber qué clientes no vinieron entre el 12/12/2007 y el 13/7/2010.  
+
+select cod_cliente Codigo, nom_cliente + space(2) +ape_cliente Cliente
+from clientes c 
+where not exists (select  cod_cliente
+					from facturas f
+					where c.cod_cliente = f.cod_cliente
+					and fecha  between '12/12/2007 ' and '13/07/2010'
+					)
+					
+select cod_cliente Codigo, nom_cliente + space(2) +ape_cliente Cliente
+from clientes c 
+where cod_cliente not in  (select  cod_cliente
+					from facturas f
+					where  fecha  between '12/12/2007 ' and '13/07/2010'
+					)
+
+--5. Liste los datos de las facturas de los clientes que solo vienen a comprar en febrero es decir que todas las veces que vino a comprar haya sido en el mes de febrero (y no otro mes).
+
+select nro_factura Factura, cod_cliente Cliente , month(fecha) MES
+from facturas f 
+where 2 =all (select month(fecha)
+				from facturas fa 
+				where f.cod_cliente = fa.cod_cliente 
+				)
+
+select* from clientes
+
+--6. Muestre los datos de las facturas para los casos en que por año se hayan hecho menos de 9 facturas.
+select  nro_factura, year(fecha) Año
+from facturas f 
+where 9>(select count(nro_factura)
+		from facturas fa
+		where year(fa.fecha) = year(f.fecha)
+		)
+
+--7. Emita un reporte con las facturas cuyo importe total haya sido superior a 300 (incluya en el reporte los datos de los artículos vendidos y los importes).
+select  f.nro_factura Factura, descripcion Articulo, d.pre_unitario* cantidad Importe
+from detalle_facturas d join  articulos a on d.cod_articulo = a.cod_articulo join facturas f on d.nro_factura = f.nro_factura
+where 300<(select sum(pre_unitario *cantidad)
+			from detalle_facturas de
+			where de.nro_factura = f.nro_factura
+			)
+
+
+--8. Se quiere saber qué vendedores nunca atendieron a estos clientes: 1 y 6. Muestre solamente el nombre del vendedor.
+
+select nom_vendedor
+from vendedores v 
+where not exists (select cod_vendedor
+					from facturas f
+					where f.cod_vendedor = v.cod_vendedor
+					and f.cod_cliente in (1,6))
+
+
+					
+select nom_vendedor
+from vendedores v 
+where cod_vendedor not in  (select cod_vendedor
+					from facturas f
+					where  f.cod_cliente in (1,6))
+
+
+
+--9. Listar los datos de los artículos que superaron el promedio del Importe de ventas de $ 200.
+
+select descripcion Articulo, cod_articulo, pre_unitario 
+from articulos a
+where 200<(select avg(pre_unitario *cantidad)
+			from detalle_facturas d 
+			where d.cod_articulo = a.cod_articulo)
+
+--10. Que artículos nunca se vendieron? Tenga además en cuenta que su nombre comience con letras que van de la “d” a la “p”. Muestre solamente la descripción del artículo.
+select cod_articulo, descripcion
+from articulos 
+where cod_articulo not in (select cod_articulo
+							from detalle_facturas)
+and descripcion like '[d-p]%'
+
+
+--11. Liste número de factura, fecha y cliente para los casos en que ese cliente haya sido atendido alguna vez por el vendedor de código 3.
+select nro_factura, fecha , c.cod_cliente
+from facturas f join clientes c on f.cod_cliente = c.cod_cliente
+where f.cod_cliente =  any(select cod_vendedor
+							from facturas fa
+							where f.cod_vendedor =3)
+
+
+
+--12. Listar número de factura, fecha, artículo, cantidad e importe para los casos en que todas las cantidades (de unidades vendidas de cada artículo) de esa factura sean superiores a 40.
+
+select d.nro_factura, fecha, cod_articulo, cantidad, cantidad*pre_unitario Importe
+from detalle_facturas d join facturas f on f.nro_factura = d.nro_factura
+where 40<all(select cantidad
+			from detalle_facturas df
+			where d.nro_factura = df.nro_factura)
+
+
+
+
+--13. Emitir un listado que muestre número de factura, fecha, artículo, cantidad e importe; para los casos en que la cantidad total de unidades vendidas sean superior a 80.
+select f.nro_factura, fecha, cantidad, cantidad*pre_unitario Importe
+from facturas f join detalle_facturas d on d.nro_factura = f.nro_factura
+where 80 < (select sum( cantidad)
+			from detalle_facturas df
+			where df.nro_factura = d.nro_factura)
+
+
+
+--14. Liste número de factura, fecha, cliente, artículo e importe para los casos en que alguno de los importes de esa factura sean menores a 100.
+select f.nro_factura, fecha, cod_articulo, cod_articulo, cantidad*pre_unitario Importe
+from facturas f join detalle_facturas d on d.nro_factura = f.nro_factura
+where 100>any (select pre_unitario*cantidad 
+			from detalle_facturas de
+			where de.nro_factura = d.nro_factura)
+
+
+
+
+
+--SUBCONSULTAS EN EL HAVING --------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+--1. Se quiere saber ¿cuándo realizó su primer venta cada vendedor? y ¿cuánto fue el importe total de las ventas que ha realizado? Mostrar estos datos en un listado solo para los casos en que su importe promedio de vendido sea superior al importe promedio general (importe promedio de todas las facturas).
+
+select min(fecha) 'Primera venta', sum(pre_unitario *cantidad) 'Importe Total', cod_vendedor Vendedor
+from detalle_facturas d join facturas f on d.nro_factura = f.nro_factura
+group by cod_vendedor
+having sum(pre_unitario*cantidad)/count(f.nro_factura)>(select avg(pre_unitario *cantidad)
+													 from detalle_facturas df)
+													 
+
+
+--2. Liste los montos totales mensuales facturados por cliente y además del promedio de ese monto y la el promedio de precio de artículos Todos esto datos correspondientes a período que va desde el 1° de febrero al 30 de agosto del 2014. Sólo muestre los datos si esos montos totales sea superior o igual al promedio global.
+
+select sum(d.pre_unitario*cantidad) 'Monto total', avg(d.pre_unitario *cantidad) Promedio , avg(a.pre_unitario) 'Promedio por articulo', cod_cliente Cliente, month(fecha) Mes
+from detalle_facturas d join facturas f on f.nro_factura = d.nro_factura join articulos a on a.cod_articulo = d.cod_articulo
+where fecha between '01/02/2014' and '30/08/2014'
+group by cod_cliente, month(fecha)
+having sum(d.pre_unitario*cantidad)>=(select avg(pre_unitario*cantidad)
+										from detalle_facturas df)
+
+
+select c.nom_cliente + space(2) + c.ape_cliente Cliente, month(fecha) 'Mes' ,year(fecha) 'Año',sum(d.pre_unitario *d.cantidad) 'Monto total Mensual', avg(d.pre_unitario *cantidad) 'Promedio Mensual', avg(a.pre_unitario) 'Promedio x Articulo'
+from facturas f join  detalle_facturas d on f.nro_factura = d.nro_factura join  articulos a on d.cod_articulo = a.cod_articulo join clientes c on c.cod_cliente = f.cod_cliente
+where fecha between '01/02/2014' and ' 30/08/2014'
+group by  c.nom_cliente + space(2) + c.ape_cliente,month(fecha) ,year(fecha)
+having sum(d.pre_unitario *cantidad)<=(select avg(pre_unitario *cantidad)
+												from detalle_facturas df)
+
+
+
+--3. Por cada artículo que se tiene a la venta, se quiere saber el importe promedio vendido, la cantidad total vendida por artículo, para los casos en que los números de factura no sean uno de los siguientes: 2, 10, 7, 13, 22 y que ese importe promedio sea inferior al importe promedio de ese artículo.
+select cod_articulo Articulo, avg(pre_unitario*cantidad) Promedio, sum(cantidad) Cantidad  
+from detalle_facturas d
+where nro_factura not in (2,10,7,13,22)
+group by cod_articulo
+having avg(pre_unitario*cantidad)<(select avg(pre_unitario*cantidad)
+									from detalle_facturas df
+									where d.cod_articulo = df.cod_articulo )
+
+
+--4. Listar la cantidad total vendida, el importe y promedio vendido por fecha, siempre que esa cantidad sea superior al promedio de la cantidad global. Rotule y ordene.
+select sum(cantidad) Cantidad,  avg(pre_unitario*cantidad) Promedio,sum(d.pre_unitario*cantidad) Importe, fecha
+from detalle_facturas d join facturas f on d.nro_factura = f.nro_factura
+group by fecha
+having sum(cantidad)>(select avg(cantidad)
+						from detalle_facturas de)
+order by 4
+
+
+--Por Año
+select sum(cantidad) 'Cantidad Vendida', sum(pre_unitario), avg(pre_unitario *cantidad) 'Promedio Vendido', year(fecha)Fecha
+from detalle_facturas d join facturas f on d.nro_factura = f.nro_factura 
+group by year(fecha)
+having sum(cantidad)>(select avg(cantidad)
+									from detalle_facturas df)
+
+
+
+--5. Se quiere saber el promedio del importe vendido y la fecha de la primer venta por fecha y artículo para los casos en que las cantidades vendidas oscilen entre 5 y 20 y que ese importe sea superior al importe promedio de ese artículo.
+
+select cod_articulo Articulo, avg(pre_unitario *cantidad) 'Promedio Vendido', min(fecha) fecha
+from detalle_facturas d join facturas f on f.nro_factura = d.nro_factura 
+where cantidad between 2 and 20 
+group by fecha, cod_articulo
+having avg(pre_unitario *cantidad)>(select avg(pre_unitario *cantidad)
+									from detalle_facturas df
+									where df.cod_articulo = d.cod_articulo)
+order by fecha
+
+--6. Emita un listado con los montos diarios facturados que sean inferior al importe promedio general.
+select day(fecha) Dia,sum(pre_unitario) Monto
+from detalle_facturas d join facturas f on f.nro_factura = d.nro_factura
+group by day(fecha)
+having sum(pre_unitario)<(select avg(pre_unitario* cantidad)
+									from detalle_facturas df)
+
+
+
+--7. Se quiere saber la fecha de la primera y última venta, el importe total facturado por cliente para los años que oscilen entre el 2007 y 2010 y que el importe promedio facturado sea menor que el importe promedio total para ese cliente.
+select min(fecha)'Primera venta', max(fecha)'Ultima venta ', sum(pre_unitario*cantidad) 'Importe total', cod_cliente Cliente 
+from detalle_facturas d join facturas f on d.nro_factura = f.nro_factura
+where year(fecha) between 2007 and 2010 
+group by cod_cliente
+having avg(pre_unitario*cantidad)<(select sum(pre_unitario *cantidad)
+									from detalle_facturas d join facturas fa on d.nro_factura = fa.nro_factura
+									where f.cod_cliente = fa.cod_cliente)
+
+
+
+
+--8. Realice un informe que muestre cuánto fue el total anual facturado por cada vendedor, para los casos en que el nombre de vendedor no comience con ‘B’ ni con ‘M’, que los nros. de facturas oscilen entre 5 y 25 y que el promedio del monto facturado sea inferior al promedio de ese año. 
+
+select sum(pre_unitario*cantidad) 'Total Anual', YEAR(fecha) año, nom_vendedor  Vendedor 
+from  detalle_facturas d join facturas f on d.nro_factura = f.nro_factura join vendedores v on v.cod_vendedor =f.cod_vendedor
+where nom_vendedor not like '[b,m]%' and d.nro_factura between 5 and 25
+group by nom_vendedor, year(fecha)
+having avg(pre_unitario *cantidad)<(select avg(pre_unitario*cantidad)
+									from detalle_facturas df join facturas fa on df.nro_factura = fa.nro_factura
+									where year(f.fecha) = year(fa.fecha))
+order by 1
+
+
+--VISTAS--------------------------------------------------------------------------------------------------------------------------------
+--crear una vista que muestre la facturacion del año actual
+
+create view vis_facturas
+as
+select f.nro_factura Factura,fecha, ape_cliente + space(2) + nom_cliente Cliente, ape_vendedor + space(2) + nom_vendedor Vendedor, descripcion Articulo, d.pre_unitario Precio ,cantidad, cantidad *d.pre_unitario Subtotal
+from facturas f join clientes c on f.cod_cliente = c.cod_cliente 
+				join vendedores v on f.cod_vendedor = v.cod_vendedor
+				join detalle_facturas d on d.nro_factura = f.nro_factura 
+				join articulos a on a.cod_articulo = d.cod_articulo
+where year(fecha) = year(getdate())
+
+select*
+from vis_facturas
+
+--Mostrar  la facturacion de este año del cliente morales (mostrar numero de factura, subtotal y vendedor)
+select Factura, Subtotal, Cliente , Vendedor
+from vis_facturas 
+where Cliente like '%Morales%'
+
+--crear una vista que muestre la facturacion del año actual (factura con su total, no detalles)
+
+create view vis_facturas_totales
+as
+select f.nro_factura Factura,fecha, ape_cliente + space(2) + nom_cliente Cliente, ape_vendedor + space(2) + nom_vendedor Vendedor,  sum(cantidad *d.pre_unitario) 'Importe Total'
+from facturas f join clientes c on f.cod_cliente = c.cod_cliente 
+				join vendedores v on f.cod_vendedor = v.cod_vendedor
+				join detalle_facturas d on d.nro_factura = f.nro_factura 
+where year(fecha)= year(getdate())
+group by f.nro_factura, fecha, ape_cliente + space(2) + nom_cliente,ape_vendedor + space(2) + nom_vendedor
+
+select*
+from vis_facturas_totales
+
+--listar los datos de las facturas de este año donde el total facturado supere los $500
+select Factura, [Importe Total]
+from vis_facturas_totales
+where [Importe Total]>500
+order by 2
+
+sp_helptext vis_facturas_totales
+
+
+create view vis_clientes
+as
+select cod_cliente Codigo, nom_cliente + space(2) + ape_cliente Cliente, calle + space(2) + str(altura) Direccion, barrio Barrio
+from clientes c join barrios b on c.cod_barrio = b.cod_barrio
+
+--Listar los clientes que comiencen con A
+select*
+from vis_clientes
+where Cliente like 'a%'
+
+sp_helptext vis_clientes
+
+-- creamos una vista encriptada
+create view vista_vendedores1 with encryption
+as
+ SELECT (ape_vendedor +' '+ nom_vendedor) nombre, barrio
+ FROM vendedores v
+ JOIN barrios b ON b.cod_barrio = v.cod_barrio
+
+ select*
+ from vista_vendedores1
+
+ sp_helptext vista_vendedores1 -- no lo muestra porque esta encriptada
+
+ --3. Cree una vista que liste la fecha, la factura, el código y nombre del vendedor, el artículo, la cantidad e importe, para lo que va del año. Rotule como FECHA, NRO_FACTURA, CODIGO_VENDEDOR, NOMBRE_VENDEDOR, ARTICULO, CANTIDAD, IMPORTE.
+ create view vis_este_año (FECHA, [NRO_FACTURA], [CODIGO_VENDEDOR], [NOMBRE_VENDEDOR], ARTICULO, CANTIDAD, IMPORTE)
+ as
+ select
+ fecha,
+ f.nro_factura,
+ f.cod_vendedor,
+ nom_vendedor + space(2) + ape_vendedor,
+ descripcion,
+ cantidad,
+ d.pre_unitario*cantidad
+ from facturas f join detalle_facturas d on f.nro_factura = d.nro_factura join articulos a on a.cod_articulo = d.cod_articulo join vendedores v on v.cod_vendedor = f.cod_vendedor
+ where year(fecha) = year(getdate())
+
+ select* from vis_este_año
+--4. Se quiere saber el importe vendido y la cantidad de ventas por vendedor. Rotule como VENDEDOR, IMPORTE_VENDIDO, CANTIDAD_VENDIDA.
+select sum(IMPORTE) 'Importe Vendido', count(NRO_FACTURA) 'Cantidad de ventas por vendedor', NOMBRE_VENDEDOR Vendedor 
+from vis_este_año
+group by NOMBRE_VENDEDOR
+
+
+--5. Modifique la vista creada en el punto 3, agréguele la condición de que solo tome lo de los últimos 12 meses y que también muestre el promedio vendido y el código del vendedor.
+
+alter view vis_este_año (FECHA, [NRO_FACTURA], [CODIGO_VENDEDOR], [NOMBRE_VENDEDOR], ARTICULO, CANTIDAD, IMPORTE,[PROMEDIO VENDIDO], COD_VENDEDOR)
+as 
+select
+ fecha,
+ f.nro_factura,
+ f.cod_vendedor,
+ nom_vendedor + space(2) + ape_vendedor,
+ descripcion,
+ cantidad,
+ d.pre_unitario*cantidad,
+ AVG(d.pre_unitario*cantidad),
+ f.cod_vendedor
+ from facturas f join detalle_facturas d on f.nro_factura = d.nro_factura join articulos a on a.cod_articulo = d.cod_articulo join vendedores v on v.cod_vendedor = f.cod_vendedor
+ where  fecha between  DATEADD(month, -12, GETDATE())  and getdate() --ultimos 12 meses
+ group by fecha,
+ f.nro_factura,
+ f.cod_vendedor,
+ nom_vendedor + space(2) + ape_vendedor,
+ descripcion,
+ cantidad,
+ d.pre_unitario*cantidad,
+ f.cod_vendedor
+--6. Consulta las vistas según el siguiente detalle:
+--a. Llame a la vista creada en el punto 3 pero filtrando por importes inferiores a $120.
+select *
+from vis_este_año
+where IMPORTE <120
+--b. Llame a la vista creada en el punto 4 filtrando para el vendedor Miranda.
+select *
+from vis_este_año
+where NOMBRE_VENDEDOR like '%miranda%'
+
+--c. Llama a la vista creada en el punto 4 filtrando para promedios superiores a 100.
+select *
+from vis_este_año
+where [PROMEDIO VENDIDO] >100
+order by [PROMEDIO VENDIDO]
+
+
+--7. Elimine las vistas creadas en el punto 3 (no se olvide de colocar el nombre como corresponde)
+
+CREATE VIEW vis_facturas_mespasado ([Nro.Factura],fecha,cliente,vendedor,total)
+AS
+ SELECT f.nro_factura,
+ fecha,
+ ape_cliente +' '+ nom_cliente,
+ ape_vendedor +' '+ nom_vendedor,
+ SUM(cantidad*pre_unitario)
+ FROM clientes c
+ JOIN facturas f ON c.cod_cliente = f.cod_cliente
+ JOIN vendedores v ON v.cod_vendedor = f.cod_vendedor
+ JOIN detalle_facturas d ON d.nro_factura = f.nro_factura
+ WHERE MONTH(fecha)= MONTH(DATEADD(MONTH, -1, GETDATE()))
+ GROUP BY f.nro_factura,
+ fecha,
+ ape_cliente +' '+ nom_cliente,
+ ape_vendedor +' '+ nom_vendedor
+
+
+ SELECT [Nro.Factura],
+ fecha,
+total
+ FROM vis_facturas_mespasado
+WHERE vendedor LIKE '%ledesma%'
+
+
+create proc pa_articulos_precios
+as
+select*
+from articulos
+where pre_unitario<50
+
+EXEC pa_articulos_precios;
+
+alter proc pa_primer_proc
+@año int =2015
+as
+select nro_factura, fecha
+from facturas
+where year(fecha) between @año and 2020
+
+execute pa_primer_proc 
+
+create proc pa_segundo_proc
+@Anio1 int,
+@Anio2 int
+as
+select nro_factura, fecha
+from facturas
+where year(fecha) between @Anio1 and @Anio2
+
+execute pa_segundo_proc @Anio1 = 2015,@Anio2 = 2020
+
+
+--PROCEDIMIENTOS ALMACENADOS
+
+--Creamos un procedimiento que muestre los artículos cuyo precio unitario sea menor a un precio que se ingresará en el momento en que se ejecute el mismo:
+
+create proc pa_articulos_menores 
+@precio money
+as
+select pre_unitario Precio, descripcion Articulo
+from articulos
+where pre_unitario< @precio
+
+execute pa_articulos_menores 50
+
+alter PROC pa_articulos_precios3
+ @precio1 money ,
+ @precio2 money 
+AS
+ SELECT *
+FROM articulos
+ WHERE pre_unitario BETWEEN @precio1 AND @precio2
+
+
+ exec pa_articulos_precios3  100,50
+
+alter PROC pa_articulos_descripcion
+ @descripcion VARCHAR(50)= '%'
+AS
+ SELECT *
+ FROM articulos
+ WHERE descripcion LIKE @descripcion;
+
+
+-- a. Detalle_Ventas: liste la fecha, la factura, el vendedor, el cliente, el artículo, cantidad eV importe. Este SP recibirá como parámetros de E un rango de fechas.
+
+alter PROC pa_Detalle_ventas
+@fecha1 datetime,
+@fecha2 datetime
+as
+select fecha Fecha, f.nro_factura Factura, cod_vendedor Vendedor, cod_cliente Cliente, cod_articulo Articulo, cantidad Cantidad, pre_unitario*cantidad Importe
+from facturas f join detalle_facturas d on f.nro_factura = d.nro_factura
+where fecha  between @fecha1 and @fecha2
+
+exec pa_Detalle_ventas '01/05/2019','01/05/2020'
+
+
+--b. CantidadArt_Cli : este SP me debe devolver la cantidad de artículos o clientes (según se pida) que existen en la empresa.
+create proc pa_cantidad_cli 
+@var varchar(50)
+as
+if(@var='articulos')
+select count(*)
+from articulos
+else if (@var = 'Clientes')
+select count(*)
+from clientes
+
+exec pa_cantidad_cli 'articulos'
+exec pa_cantidad_cli 'clientes'
+select *
+from vendedores
+
+--c. INS_Vendedor: Cree un SP que le permita insertar registros en la tabla vendedores.
+
+alter proc pa_ins_vendedor
+@nombre varchar (30),
+@apellido varchar (30),
+@calle varchar (50),
+@altura int,
+@cod_barrio int,
+@tel int,
+@email varchar(50),
+@fec_nac datetime
+as
+insert vendedores (nom_vendedor,ape_vendedor,calle,altura,cod_barrio,nro_tel,[e-mail],fec_nac)   values (@nombre,@apellido,@calle,@altura,@cod_barrio,@tel,@email,@fec_nac)
+
+
+exec pa_ins_vendedor 'Pepita','Juarez','larilari',300,2,351676543,'pepitajuarez@hotmail,com','10/10/2010'
+
+select*
+from vendedores
+
+--d. UPD_Vendedor: cree un SP que le permita modificar un vendedor cargado.
+
+alter proc pa_upd_vendedores
+@cod_vendedor int ,
+@columna  varchar(50),
+@dato varchar(50)
+as
+update  vendedores
+set @columna = @dato
+where cod_vendedor = @cod_vendedor
+
+exec pa_upd_vendedores 16,'nom_vendedor','Juana '
+
+alter proc modif_vendedor
+@codigo int,
+@NomVend varchar(20),
+@ApeVend varchar (20),
+@calle varchar (25),
+@altura int,
+@codBarrio int,
+@nroTel bigint,
+@mail varchar (30),
+@fecNac datetime
+as
+update vendedores
+set nom_vendedor=@NomVend,
+ape_vendedor=@ApeVend,
+calle=@calle,
+altura= @altura,
+cod_barrio= @codBarrio,
+nro_tel=@nroTel,
+[e-mail]= @mail,
+fec_nac = @fecNac
+where cod_vendedor =@codigo
+
+exec modif_vendedor 7,'Julio', 'Disalvo', 'AV. Cordoba', 603, 2, 3515602828, 'Bollerleon89@gmail,com', '731997'
+
+
+select*from vendedores
+
+--e. DEL_Vendedor: cree un SP que le permita eliminar un vendedor ingresado.
+
+create proc del_vendedores
+@cod_vend int 
+as
+delete vendedores
+where cod_vendedor = @cod_vend
+
+exec del_vendedores 16
+
+--EJERCICIOS DEL PARCIAL
+
+  --  1. Liste los datos de los responsables y sus vehículos modelo anterior al año que se indicará cuando se ejecute o comprados antes de una fecha que también se ingresará por parámetro (crear un SP) solo de aquellos vehículos que siempre que fueron a mantenimiento lo hicieron después del 20 de cada mes y no en otra fecha. 
+--Escriba la sentencia de ejecución del SP para los vehículos comprados antes del 2015 o modelos anteriores al 2014
+
+create proc Unidades_Responsables
+@modelo int ,
+@fecha datetime
+as
+
+SELECT cod_responsable Responsable, nombre Nombre, direccion Direccion, cod_unidad Unidad, marca, modelo, fec_compra 'Fecha de compra', descripcion
+FROM responsables r join  unidades u on r.cod_responsable = u.cod_responsable 
+where all(select month(fec_mantenimiento)
+			from mantenimientos m
+			where day(fec_mantenimiento)>20
+			and u.cod_unidad = m.cod_unidad)
+and (modelo< @modelo or fec_compra<@fecha) 
+
+execute Unidades_Responsables @modelo= 2014, @fecha = '01/01/2015'
+
+
+  --  2. Cree una vista que liste por cada mecánico, la cantidad de mantenimientos, la fecha del primer y último mantenimiento y el monto total pagados a los mismos el mes pasado siempre que el promedio del monto sea inferior al promedio de lo que va del año. 
+--Escriba la sentencia para mostrar la vista anterior, el nombre de mecánico y monto total de aquellos que realizaron más de dos mantenimientos el mes pasado.
+
+create view vis_Mecanicos (Mecanico,Nombre [Cantidad_Mantenimientos], [Primer_Mantenimiento],[Ultimo_Mantenimiento] [Monto_total]
+as
+select cod_mecanico,nombre, count(*),min(fec_mantenimi),max(fec_mantenim),sum(monto)
+from mantenimientos m join mecanicos me on m.cod_mecanico = me.cod_mecanico
+where month(fec_mantenim) = month(dateadd(month,-1,getdate()) and 
+year(fec_mantenim) = year(dateadd(month,-1,getdate())
+group by cod_mecanico
+having avg(monto)<(select avg(monto)
+					from mantenimientos ma
+					where year(fec_mantenim) = year(getdate()))
+
+----Escriba la sentencia para mostrar la vista anterior, el nombre de mecánico y 
+--monto total de aquellos que realizaron más de dos mantenimientos el mes pasado.
+
+select Nombre,[Monto_Total]
+from vis_Mecanicos
+where [Cantidad_Mantenimientos]>2
+
+
+   -- 1. Se quiere saber los clientes que nunca pagaron entre el 1 y el 10 de cada mes. Detalle todos los datos de éste (el cliente), además a qué clase ha asistido este año y el anterior (nombre de actividad e instructor). Solo muestre aquellos clientes nacidos en una década que se ingresará por parámetro (Crear un SP). 
+--Ejecutar el P. A. anterior para clientes nacidos en la década del 90. 
+
+create proc pa_clientes
+@decada int 
+as
+select cod_cliente CLiente, nombre, fec_nac 'Fecha de nacimiento',telefono, id_barrio,email, c.id_actividad,descripcion, c.id_instructor, i.nombre
+from clientes cl join pagos p on cl.cod_cliente = p.cod_cliente
+				 join clases c on c.id_clase =p.id_clase 
+				 join actividades a on a.id = c.id_actividad 
+				 join instructores i = i.id = c.id_instructor 
+where cod_cliente not in (select cod_cliente
+						 from pagos
+						 where day(fecha) between 1 and 10)
+and year(mes_año) = year(getdate())-1
+and year(mes_año) = year(getdate())
+and year(fec_nac) between @decada and @decada+10
+--Ejecutar el P. A. anterior para clientes nacidos en la década del 90. 
+execute pa_clientes 1990
+
+--    2. Crear una vista que muestre el importe total, la cantidad de pagos, el promedio pagado y la fecha del primer y último pago por actividad por mes este año.
+
+create view vis_pagos
+as
+select sum(monto)'Importe Total', count(*)'Cantidad de pagos', avg(monto) 'Promedio pagado',min(fecha)'Primer pago'm max(fecha)'Ultimo pago',a.descripcion Actividad,month(fecha)
+from pagos p join clases c on c.id = p.id_clase 
+			 join actividades a on a.id = c.id_actividad
+where year(fecha) = year(getdate())
+group by descripcion, month(fecha)
+			 
+
+--Realizar una consulta a la vista anterior mostrando la descripción de la actividad y el importe total solo los casos en que el promedio pagado sea menor al promedio general pagado el mes pasado
+
+select Actividad, [Importe Total]
+from vis_pagos
+where [Promedio pagado]<(select avg(monto)
+						from pagos 
+						where datediff(month,fecha,getdate())=1
+						)
+
+--    1. Se quiere saber los afiliados que siempre pagaron sus cuotas en término entre este año y el anterior. Detalle todos los datos de estos afiliados, además a qué plan están pagando. Solo muestre aquellos afiliados nacidos en una década que se ingresará por parámetro (Crear un SP). 
+
+create proc pa_afiliados
+@decada int
+as
+select cod_afi Afiliado, nombre + space(2) + apellido 'Nombre completo',fec_nac 'Fecha de Nacimiento',p.cod_plan Plan
+from afiliados a join pagos p on a.cod_afi= p.cod_afi
+where cod_afi not in(select cod_afi
+			from pagos pa
+			where day(fecha_pago) between 1 and 10
+			and year(fecha_pago) in (year(getdate())-1, year(getdate()))
+			)
+			--where 0=all(select recargo
+--				from pagos
+--				where year(fecha_pago) >= year(getdate())-1
+--				and cod_afi=a.cod_afi)
+--where fecha_vto>=all(select fecha_pago
+--					from pagos
+--					where year(fecha_pago) >= year(getdate())-1
+--					and cod_afi=a.cod_afi)
+and fec_nac between @decada and @decada+10
+		  
+--Ejecutar el P. A. anterior para clientes nacidos en la década del 90. 
+execute pa_afiliados @decada = 1990
+
+ --   2. Crear una vista que muestre el importe total pagado (importe pagado es igual al importe de la cuota más el recargo), la cantidad de pagos, el promedio pagado y la fecha del primer y último pago por plan por mes los últimos 5 años, donde ese promedio pagado sea menor al promedio pagado el mes pasado.
+ 
+ create view vis_pagos_plan  [Importe Total],[Cantidad Pagos],[Promedio Pagado],[Primer Pago], [Ultimo Pago], Plan, Mes [año]
+ as
+ select (importe_cuota + recargo), count(*),avg(importe_cuota +recargo),min(fecha_pago),max(fecha_pago) descripcion,month(fecha_pago),year(fecha_pago)
+ from pagos p join planes pl on p.cod_plan = pl.cod_plan
+ where year(fecha_pago)>=year(getdate())-5
+ group by descripcion , month(fecha_pago), year(fecha_pago)
+ having avg(importe_cuota+recargo)<(select avg(importe_cuota+recargo)
+							from pagos pa
+							where datediff(month,fecha_pago,getdate())=1
+							)
+
+
+--Realizar una consulta a la vista anterior mostrando la descripción del plan y el importe total solo los casos en que se hayan pagado más de 20 cuotas
+
+select plan, [Importe Total]
+from vis_pagos_plan
+where [Cantidad Pagos]>20
+
