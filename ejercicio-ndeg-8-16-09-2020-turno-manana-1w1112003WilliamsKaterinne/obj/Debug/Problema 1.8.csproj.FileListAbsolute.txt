@@ -1,0 +1,10 @@
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\bin\Debug\Problema 1.8.exe.config
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\bin\Debug\Problema 1.8.exe
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\bin\Debug\Problema 1.8.pdb
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\obj\Debug\Problema 1.8.csprojAssemblyReference.cache
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\obj\Debug\Problema_1._8.frmCursos.resources
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\obj\Debug\Problema_1._8.Properties.Resources.resources
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\obj\Debug\Problema 1.8.csproj.GenerateResource.cache
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\obj\Debug\Problema 1.8.csproj.CoreCompileInputs.cache
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\obj\Debug\Problema 1.8.exe
+C:\Users\causa\OneDrive\Escritorio\Segundo CuatriMestre\Programacion II\Practico\Problema 1.8\obj\Debug\Problema 1.8.pdb
