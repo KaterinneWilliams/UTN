@@ -1,0 +1,7 @@
+Realizar el ABM Productos, utilizando el archivo access o accediendo a la BD remota (recomendado)
+Datos de conexión:
+
+servidor: 138.99.7.66,1433
+usuario: tup_2020
+contraseña: tup2020_!@NH
+BD: TUP_PII_2020
