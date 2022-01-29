@@ -1,0 +1,31 @@
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.exe
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.deps.json
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.runtimeconfig.json
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.runtimeconfig.dev.json
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.dll
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.pdb
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.csprojAssemblyReference.cache
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio_5_prog2.frmProductos.resources
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.csproj.GenerateResource.cache
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.AssemblyInfoInputs.cache
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.AssemblyInfo.cs
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.csproj.CoreCompileInputs.cache
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.dll
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.pdb
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.genruntimeconfig.cache
+C:\Users\usuario\source\repos\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio_5_prog2.Form2.resources
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.exe
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.deps.json
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.runtimeconfig.json
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.runtimeconfig.dev.json
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.dll
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\bin\Debug\netcoreapp3.1\ejercicio 5 prog2.pdb
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.csprojAssemblyReference.cache
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio_5_prog2.frmProductos.resources
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.csproj.GenerateResource.cache
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.AssemblyInfoInputs.cache
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.AssemblyInfo.cs
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.dll
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.pdb
+C:\Users\Admin\Downloads\ejercicio 5 prog2\ejercicio 5 prog2\obj\Debug\netcoreapp3.1\ejercicio 5 prog2.genruntimeconfig.cache
